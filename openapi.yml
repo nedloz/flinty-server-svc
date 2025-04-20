@@ -1,0 +1,216 @@
+openapi: 3.1.0
+info:
+  title: Guildy Core API
+  description: Backend API for Discord-like guild management system
+  version: 1.0.0
+servers:
+  - url: https://api.guildy.app
+
+paths:
+  /servers/{server_id}:
+    get:
+      summary: Get server info
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: server_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Server info
+        '403': { description: Not a member }
+    patch:
+      summary: Update server (requires manage_server)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: server_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                avatar_url: { type: string }
+                visibility: { type: string, enum: [public, private] }
+                tags:
+                  type: array
+                  items: { type: object, properties: { tag_name: { type: string } } }
+      responses:
+        '200': { description: Server updated }
+  /servers/{server_id}/join:
+    post:
+      summary: Join server
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Joined successfully }
+  /servers/{server_id}/leave:
+    post:
+      summary: Leave server
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Left successfully }
+  /servers/{server_id}/bans:
+    get:
+      summary: Get ban list
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: List of banned users }
+  /servers/{server_id}/ban/{user_id}:
+    post:
+      summary: Ban user
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason: { type: string }
+      responses:
+        '200': { description: Member banned }
+    patch:
+      summary: Update ban reason
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason: { type: string }
+      responses:
+        '200': { description: Reason updated }
+    delete:
+      summary: Unban user
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: User unbanned }
+  /servers/{server_id}/members:
+    get:
+      summary: Get all members
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: List of members (no roles shown) }
+  /servers/{server_id}/members/{user_id}:
+    get:
+      summary: Get specific member
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Member info or Access Denied }
+  /servers/{server_id}/roles:
+    get:
+      summary: Get roles
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: List of roles }
+    post:
+      summary: Create role
+      security:
+        - bearerAuth: []
+      responses:
+        '201': { description: Role created }
+  /servers/{server_id}/roles/{role_id}:
+    patch:
+      summary: Update role permissions
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Role updated }
+    delete:
+      summary: Delete role
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Role deleted }
+  /servers/{server_id}/roles/add:
+    post:
+      summary: Assign role to user
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [user_id, role_id]
+              properties:
+                user_id: { type: string }
+                role_id: { type: string }
+                channel_id: { type: string, nullable: true }
+      responses:
+        '200': { description: Role added }
+  /servers/{server_id}/roles/remove:
+    post:
+      summary: Remove role from user
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [user_id, role_id]
+              properties:
+                user_id: { type: string }
+                role_id: { type: string }
+                channel_id: { type: string, nullable: true }
+      responses:
+        '200': { description: Role removed }
+  /servers/{server_id}/channels:
+    get:
+      summary: Get visible channels
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Sorted visible channels }
+    post:
+      summary: Create channel
+      security:
+        - bearerAuth: []
+      responses:
+        '201': { description: Channel created }
+  /servers/{server_id}/channels/{channel_id}:
+    get:
+      summary: Get channel if permitted
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Channel data }
+    patch:
+      summary: Update channel
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Channel updated }
+    delete:
+      summary: Delete channel
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Channel deleted }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+

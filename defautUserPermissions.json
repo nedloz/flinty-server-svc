@@ -1,0 +1,22 @@
+[
+  {
+    "key": "view_channel",
+    "description": "Видеть и получить доступ к каналу"
+  },
+  {
+    "key": "send_messages",
+    "description": "Отправлять сообщения в канале"
+  },
+  {
+    "key": "edit_messages",
+    "description": "Редактировать свои сообщения"
+  },
+  {
+    "key": "delete_messages",
+    "description": "Удалять свои сообщения"
+  },
+  {
+    "key": "mention_everyone",
+    "description": "Использовать @everyone и массовые пинги"
+  }
+]

@@ -1,0 +1,39 @@
+[
+    {
+      "key": "manage_server",
+      "description": "Изменять настройки сервера (название, иконка и т.д.)"
+    },
+    {
+      "key": "manage_channels",
+      "description": "Создавать/редактировать/удалять каналы"
+    },
+    {
+      "key": "manage_roles",
+      "description": "Создавать/удалять/изменять роли"
+    },
+    {
+      "key": "assign_roles",
+      "description": "Назначать роли участникам"
+    },
+    {
+      "key": "kick_members",
+      "description": "Исключать участников с сервера"
+    },
+    {
+      "key": "ban_members",
+      "description": "Банить участников"
+    },
+    {
+      "key": "view_audit_log",
+      "description": "Видеть лог действий участников"
+    },
+    {
+      "key": "view_roles",
+      "description": "Видеть все роли"
+    },
+    {
+      "key": "create_invites",
+      "description": "Создавать инвайты на сервер или в канал"
+    }
+  ]
+  
