@@ -12,4 +12,5 @@ router.delete('/unban', MembersController.unbanMember);
 router.patch('/ban-reason', MembersController.updateBanReason);
 router.post('/kick', MembersController.kickMember);
 router.get('/bans', MembersController.getBanList);
+
 module.exports = router;

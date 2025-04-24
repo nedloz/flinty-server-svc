@@ -4,7 +4,7 @@ A lightweight Discord-like backend system built on Node.js + MongoDB with a full
 
 ---
 
-## 📦 Project Modules
+## 📆 Project Modules
 - **Servers**: creation, editing, deletion, joining, banning
 - **Members**: join/leave server, assign/remove roles
 - **Roles**: permission management
@@ -106,17 +106,19 @@ A lightweight Discord-like backend system built on Node.js + MongoDB with a full
 | Method | Route | Description |
 |--------|-------|-------------|
 | `GET`  | `/servers/:server_id/bans` | List banned users (`ban_members`) |
-| `POST` | `/servers/:server_id/ban/:user_id` | Ban user (`ban_members`) |
-| `PATCH`| `/servers/:server_id/ban/:user_id` | Update ban reason |
-| `DELETE`| `/servers/:server_id/ban/:user_id` | Unban user |
+| `POST` | `/servers/:server_id/ban` | Ban user (`ban_members`) |
+| `PATCH`| `/servers/:server_id/ban-reason` | Update ban reason |
+| `DELETE`| `/servers/:server_id/unban` | Unban user |
 
 ### 🔹 Members
 | Method | Route | Description |
 |--------|-------|-------------|
 | `GET`  | `/servers/:server_id/members` | List members (hides roles) |
-| `GET`  | `/servers/:server_id/members/:user_id` | Get member (only self or admin) |
+| `POST` | `/servers/:server_id/members/get` | Get member (only self or admin) |
+| `POST` | `/servers/:server_id/kick` | Kick member (`kick_members`) |
 | `POST` | `/servers/:server_id/roles/add` | Assign role (`assign_roles`) |
 | `POST` | `/servers/:server_id/roles/remove` | Remove role (`assign_roles`) |
+| `POST` | `/servers/:server_id/permissions/check` | Check if current user has a permission |
 
 ### 🔹 Roles
 | Method | Route | Description |
@@ -138,4 +140,3 @@ A lightweight Discord-like backend system built on Node.js + MongoDB with a full
 ---
 
 > 💡 Все защищённые маршруты требуют JWT-пользователя и соблюдают роль + пермишены.
-

@@ -2,7 +2,7 @@ const Server = require('../collections/Server');
 const ServerMember = require('../collections/ServerMember');
 const { v4: uuidv4 } = require('uuid');
 const comparePermissions = require('../utils/checkPermission');
-const adminPermissions = require('../permissions/admin-permissions.json');
+const adminPermissions = require('../adminPermissions.json');
 const ADMIN_PERMISSION_KEYS = adminPermissions.map(p => p.key);
 
 
@@ -290,6 +290,32 @@ const updateDefaultNotifications = async (req, res, next) => {
 };
 
 
+const permissionCheck = async (req, res, next) => {
+    try {
+        const { server_id } = req.params;
+        const userId = req.user?.user_id;
+        const { permission, channel_id = null } = req.body;
+
+        if (!userId) throw { status: 401, message: 'Unauthorized' };
+        if (!permission) throw { status: 400, message: 'Permission key is required' };
+
+        const server = await Server.findOne({ server_id });
+        if (!server) throw { status: 404, message: 'Server not found' };
+
+        const member = await ServerMember.findOne({ server_id, user_id: userId });
+        if (!member) throw { status: 403, message: 'You are not a member of this server' };
+
+        const has = comparePermissions(server, member, permission, channel_id);
+
+        res.status(200).json({ hasPermission: has });
+    } catch (err) {
+        next(err);
+    }
+};
+
+
+
+
 module.exports = {
     createServer,
     getServer,
@@ -298,5 +324,6 @@ module.exports = {
     joinServer,
     leaveServer,
     getDefaultNotifications,
-    updateDefaultNotifications
+    updateDefaultNotifications,
+    permissionCheck
 }

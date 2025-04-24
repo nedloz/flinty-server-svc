@@ -1,6 +1,6 @@
 const Server = require('../collections/Server');
 const { v4: uuidv4 } = require('uuid');
-const adminPermissions = require('../permissions/admin-permissions.json');
+const adminPermissions = require('../adminPermissions.json');
 const ADMIN_PERMISSION_KEYS = adminPermissions.map(p => p.key);
 
 
