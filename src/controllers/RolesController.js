@@ -1,6 +1,8 @@
 const Server = require('../collections/Server');
 const { v4: uuidv4 } = require('uuid');
 const comparePermissions = require('../utils/checkPermission');
+const ServerMember = require('../collections/ServerMember');
+
 
 const createRole = async (req, res, next) => {
     try {

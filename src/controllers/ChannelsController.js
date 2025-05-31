@@ -2,6 +2,9 @@ const Server = require('../collections/Server');
 const { v4: uuidv4 } = require('uuid');
 const adminPermissions = require('../adminPermissions.json');
 const ADMIN_PERMISSION_KEYS = adminPermissions.map(p => p.key);
+const ServerMember = require('../collections/ServerMember');
+const comparePermissions = require('../utils/checkPermission');
+const produceKafkaMessage = require('../kafka/producer');
 
 
 const createChannel = async (req, res, next) => {
@@ -61,8 +64,14 @@ const createChannel = async (req, res, next) => {
             position: newPosition,
             default_role_id: safeDefaultRoleId
         });
-
+        const channels = server.channels;
         await server.save();
+
+        await produceKafkaMessage('server.channels.update', {
+            server_id,
+            channels
+        })
+
         res.status(201).json({ channel_id });
     } catch (err) {
         next(err);

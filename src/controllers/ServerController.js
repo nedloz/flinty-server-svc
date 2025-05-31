@@ -3,6 +3,7 @@ const ServerMember = require('../collections/ServerMember');
 const { v4: uuidv4 } = require('uuid');
 const comparePermissions = require('../utils/checkPermission');
 const adminPermissions = require('../adminPermissions.json');
+const produceKafkaMessage = require('../kafka/producer');
 const ADMIN_PERMISSION_KEYS = adminPermissions.map(p => p.key);
 
 
@@ -51,6 +52,13 @@ const createServer = async (req, res, next) => {
         newServer.members_count += 1;
     
         await newServer.save();
+
+        // отправка в кафку 
+        await produceKafkaMessage('user.join.server', {
+            user_id: userId,
+            server_id: serverId,
+            channels: []
+        })
         res.status(201).json({ server_id: serverId });
     
       } catch (err) {
